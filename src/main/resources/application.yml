@@ -1,0 +1,9 @@
+spring:
+  application.name: recommendations
+security.basic.enabled: false
+netflix:
+  appinfo.name: ${spring.application.name}
+eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka/
+server.port: 8080
+endpoints.health.sensitive: false
+membership.ribbon.DeploymentContextBasedVipAddresses: membership
