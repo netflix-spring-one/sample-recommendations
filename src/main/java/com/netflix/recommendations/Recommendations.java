@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -48,11 +49,13 @@ class RecommendationsController {
     Set<Movie> familyRecommendations = Sets.newHashSet(new Movie("hook"), new Movie("the sandlot"));
 
     @RequestMapping("/{user}")
-    @HystrixCommand(fallbackMethod = "recommendationFallback")
-    public Set<Movie> findRecommendationsForUser(@PathVariable String user) {
+    @HystrixCommand(fallbackMethod = "recommendationFallback",
+            ignoreExceptions = UserNotFoundException.class,
+            commandProperties={@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")})
+    public Set<Movie> findRecommendationsForUser(@PathVariable String user) throws UserNotFoundException {
         Member member = membershipRepository.findMember(user);
         if(member == null)
-            return familyRecommendations;
+            throw new UserNotFoundException();
         return member.age < 17 ? kidRecommendations : adultRecommendations;
     }
 
@@ -75,3 +78,5 @@ class Member {
     String user;
     Integer age;
 }
+
+class UserNotFoundException extends Exception {}
