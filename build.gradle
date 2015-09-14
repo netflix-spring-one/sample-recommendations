@@ -33,6 +33,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-aop'
     compile 'org.springframework.cloud:spring-cloud-starter-eureka'
     compile 'org.springframework.cloud:spring-cloud-starter-hystrix'
+	compile 'org.springframework.cloud:spring-cloud-starter-feign'
 
     compile 'com.netflix.spring:spring-cloud-netflix-contrib:latest.release'
 
