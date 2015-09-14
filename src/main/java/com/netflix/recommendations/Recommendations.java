@@ -3,9 +3,7 @@ package com.netflix.recommendations;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,24 +13,18 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.cloud.netflix.metrics.atlas.EnableAtlas;
-import org.springframework.cloud.netflix.metrics.spectator.EnableSpectator;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Sets;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableEurekaClient
 @EnableFeignClients
-@EnableSpectator
-@EnableAtlas
 public class Recommendations {
     public static void main(String[] args) {
         new SpringApplicationBuilder(Recommendations.class).web(true).run(args);
@@ -57,8 +49,10 @@ class RecommendationsController {
 
     @RequestMapping("/{user}")
     @HystrixCommand(fallbackMethod = "recommendationFallback")
-    public Set<Movie> findRecodmmenationsForUser(@PathVariable String user) {
+    public Set<Movie> findRecommendationsForUser(@PathVariable String user) {
         Member member = membershipRepository.findMember(user);
+        if(member == null)
+            return familyRecommendations;
         return member.age < 17 ? kidRecommendations : adultRecommendations;
     }
 
