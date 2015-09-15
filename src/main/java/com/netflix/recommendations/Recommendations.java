@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,12 @@ import com.google.common.collect.Sets;
 public class Recommendations {
     public static void main(String[] args) {
         new SpringApplicationBuilder(Recommendations.class).web(true).run(args);
+    }
+
+    @Primary
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
 
@@ -36,7 +44,7 @@ class RecommendationsController {
 
     @RequestMapping("/{user}")
     public Set<Movie> findRecommendationsForUser(@PathVariable String user) throws UserNotFoundException {
-        Member member = restTemplate.getForObject("http://members/api/member/{user}", Member.class, user);
+        Member member = restTemplate.getForObject("http://localhost:8000/api/member/{user}", Member.class, user);
         if(member == null)
             throw new UserNotFoundException();
         return member.age < 17 ? kidRecommendations : adultRecommendations;
