@@ -32,4 +32,6 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.projectlombok:lombok:latest.release'
     compile 'com.google.guava:guava:latest.release'
+
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka'
 }
