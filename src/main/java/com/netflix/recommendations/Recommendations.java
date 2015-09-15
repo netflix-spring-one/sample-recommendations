@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.cloud.netflix.eureka.EurekaStatusChangedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Sets;
+import com.netflix.appinfo.InstanceInfo;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -26,10 +26,11 @@ public class Recommendations {
         new SpringApplicationBuilder(Recommendations.class).web(true).run(args);
     }
 
-    @Primary
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    @EventListener
+    public void onEurekaStatusDown(EurekaStatusChangedEvent event) {
+        if(event.getStatus() == InstanceInfo.InstanceStatus.DOWN || event.getStatus() == InstanceInfo.InstanceStatus.OUT_OF_SERVICE) {
+            System.out.println("Stop listening to queues and such...");
+        }
     }
 }
 
