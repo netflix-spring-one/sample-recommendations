@@ -7,7 +7,9 @@ netflix:
   atlas.uri: http://localhost:7101/api/v1/publish
 
 eureka:
-  instance.appGroupName: 'default'
+  instance:
+    hostname: 'theone'
+    appGroupName: 'sample'
   client.serviceUrl.defaultZone: http://localhost:9000/eureka/
 
 server.port: 8001

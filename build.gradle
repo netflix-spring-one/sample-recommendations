@@ -35,7 +35,7 @@ dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-hystrix'
 	compile 'org.springframework.cloud:spring-cloud-starter-feign'
 
-//    compile 'com.netflix.spring:spring-cloud-netflix-contrib:latest.release'
+    compile 'com.netflix.spring:spring-cloud-netflix-contrib:latest.release'
 
 //    compile 'com.netflix.spectator:spectator-api:0.30.0'
 //    compile 'com.netflix.spectator:spectator-reg-servo:0.30.0'

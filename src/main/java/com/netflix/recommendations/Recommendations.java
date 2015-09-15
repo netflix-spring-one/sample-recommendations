@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.netflix.appinfo.InstanceInfo;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.eureka.EurekaStatusChangedEvent;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +32,13 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 public class Recommendations {
     public static void main(String[] args) {
         new SpringApplicationBuilder(Recommendations.class).web(true).run(args);
+    }
+
+    @EventListener
+    public void onEurekaStatusDown(EurekaStatusChangedEvent event) {
+        if(event.getStatus() == InstanceInfo.InstanceStatus.DOWN || event.getStatus() == InstanceInfo.InstanceStatus.OUT_OF_SERVICE) {
+            System.out.println("Stop listening to queues and such...");
+        }
     }
 }
 
