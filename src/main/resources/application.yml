@@ -1,17 +1,5 @@
 spring:
   application.name: recommendations
-  autoconfigure.exclude: org.springframework.cloud.netflix.servo.ServoMetricsAutoConfiguration
 security.basic.enabled: false
-netflix:
-  appinfo.name: ${spring.application.name}
-  atlas.uri: http://localhost:7101/api/v1/publish
-
-eureka:
-  instance:
-    hostname: 'theone'
-    appGroupName: 'sample'
-  client.serviceUrl.defaultZone: http://localhost:9000/eureka/
-
 server.port: 8001
 endpoints.health.sensitive: false
-membership.ribbon.DeploymentContextBasedVipAddresses: membership
