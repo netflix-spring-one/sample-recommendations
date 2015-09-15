@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Membership Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Membership Dashboard</h1>
+<div id="graphs"></div>
+<script type="text/jsx">
+    var Timer = React.createClass({
+        getInitialState: function() {
+            return {time: +new Date()};
+        },
+        tick: function() {
+            this.setState({time: +new Date()});
+        },
+        componentDidMount: function() {
+            this.interval = setInterval(this.tick, 3000);
+        },
+        componentWillUnmount: function() {
+            clearInterval(this.interval);
+        },
+        render: function() {
+            return (
+                <div>
+					<table>
+						<tr><td>Rate by time bucket</td><td><img src={"http://localhost:7101/api/v1/graph?q=name,rest,:eq,statistic,count,:eq,:and,:avg,(,bucket,),:by,:stack&step=PT10S&id=" + this.state.time}/></td></tr>
+						<tr><td>Rate by time bucket and handler name</td><td><img src={"http://localhost:7101/api/v1/graph?q=name,rest,:eq,statistic,count,:eq,:and,:avg,(,bucket,handlerName,),:by,:stack&step=PT10S&id=" + this.state.time}/></td></tr>
+						<tr><td>% Response codes</td><td><img src={"http://localhost:7101/api/v1/graph?q=name,rest,:eq,statistic,count,:eq,:and,:avg,(,status,),:by,:pct,:stack&step=PT1S&id=" + this.state.time}/></td></tr>
+                    	<tr><td>Max time spent by handler name</td><td><img src={"http://localhost:7101/api/v1/graph?q=name,rest,:eq,statistic,totalTime,:eq,:and,:max,(,handlerName,),:by,:stack&step=PT10S&id=" + this.state.time}/></td></tr>
+						<tr><td>Average time spent by handler name</td><td><img src={"http://localhost:7101/api/v1/graph?q=name,rest,:eq,statistic,totalTime,:eq,:and,:avg,(,handlerName,),:by&step=PT10S&id=" + this.state.time}/></td></tr>
+                	</table>
+				</div>
+            );
+        }
+    });
+
+    React.render(<Timer />, document.getElementById('graphs'));
+</script>
+</body>
+</html>
