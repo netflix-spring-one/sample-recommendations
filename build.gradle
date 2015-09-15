@@ -30,17 +30,6 @@ dependencyManagement {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
-    compile 'org.springframework.boot:spring-boot-starter-aop'
-    compile 'org.springframework.cloud:spring-cloud-starter-eureka'
-    compile 'org.springframework.cloud:spring-cloud-starter-hystrix'
-	compile 'org.springframework.cloud:spring-cloud-starter-feign'
-
-    compile 'com.netflix.spring:spring-cloud-netflix-contrib:latest.release'
-
-//    compile 'com.netflix.spectator:spectator-api:0.30.0'
-//    compile 'com.netflix.spectator:spectator-reg-servo:0.30.0'
-//    compile 'com.netflix.spectator:spectator-ext-sandbox:0.30.0'
-//    compile 'com.netflix.servo:servo-atlas:0.11.2'
-
     compile 'org.projectlombok:lombok:latest.release'
+    compile 'com.google.guava:guava:latest.release'
 }
