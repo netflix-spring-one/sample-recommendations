@@ -34,6 +34,8 @@ dependencies {
     compile 'com.google.guava:guava:latest.release'
 
     compile 'org.springframework.cloud:spring-cloud-starter-eureka'
+    compile 'org.springframework.cloud:spring-cloud-starter-feign'
+    compile 'org.springframework.cloud:spring-cloud-starter-hystrix'
 
     compile 'com.netflix.spring:spring-cloud-netflix-contrib:0.3.0'
 }
