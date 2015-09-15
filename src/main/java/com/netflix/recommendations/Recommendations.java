@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Sets;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.servlet.HandlerMapping;
 
 @SpringBootApplication
 @EnableCircuitBreaker
@@ -61,8 +64,12 @@ class RecommendationsController {
     @RequestMapping("/{user}")
     @HystrixCommand(fallbackMethod = "recommendationFallback",
             ignoreExceptions = UserNotFoundException.class,
-            commandProperties={@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")})
+            commandProperties={
+                @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+                @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+            })
     public Set<Movie> findRecommendationsForUser(@PathVariable String user) throws UserNotFoundException {
+        RequestContextHolder.currentRequestAttributes();
         Member member = membershipRepository.findMember(user);
         if(member == null)
             throw new UserNotFoundException();
