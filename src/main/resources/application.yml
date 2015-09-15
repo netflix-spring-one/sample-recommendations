@@ -4,6 +4,6 @@ security.basic.enabled: false
 server.port: 8001
 endpoints.health.sensitive: false
 eureka:
-  instance.hostname: theone
+  instance.appGroupName: sample
   client.serviceUrl.defaultZone: http://localhost:9000/eureka/
 members.ribbon.DeploymentContextBasedVipAddresses: membership
