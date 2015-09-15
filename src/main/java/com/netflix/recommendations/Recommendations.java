@@ -2,6 +2,7 @@ package com.netflix.recommendations;
 
 import java.util.Set;
 
+import com.netflix.governator.annotations.binding.Primary;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.eureka.EurekaStatusChangedEvent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,12 @@ import com.netflix.appinfo.InstanceInfo;
 public class Recommendations {
     public static void main(String[] args) {
         new SpringApplicationBuilder(Recommendations.class).web(true).run(args);
+    }
+
+    @Primary
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     @EventListener
