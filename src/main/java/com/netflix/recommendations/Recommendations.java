@@ -28,12 +28,6 @@ public class Recommendations {
         new SpringApplicationBuilder(Recommendations.class).web(true).run(args);
     }
 
-    @Primary
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
     @EventListener
     public void onEurekaStatusDown(EurekaStatusChangedEvent event) {
         if(event.getStatus() == InstanceInfo.InstanceStatus.DOWN || event.getStatus() == InstanceInfo.InstanceStatus.OUT_OF_SERVICE) {
@@ -53,7 +47,7 @@ class RecommendationsController {
 
     @RequestMapping("/{user}")
     public Set<Movie> findRecommendationsForUser(@PathVariable String user) throws UserNotFoundException {
-        Member member = restTemplate.getForObject("http://localhost:8000/api/member/{user}", Member.class, user);
+        Member member = restTemplate.getForObject("http://members/api/member/{user}", Member.class, user);
         if(member == null)
             throw new UserNotFoundException();
         return member.age < 17 ? kidRecommendations : adultRecommendations;
